@@ -14,7 +14,7 @@ final class BlueCheeseUpdateStrategy implements IUpdateStrategy
 
     public function updateQuality(Item $item): void
     {
-        $item->sell_in -= 1;
+        --$item->sell_in;
 
         if ($item->sell_in < 0) {
             $item->quality += self::QUALITY_INCREMENTOR * 2;

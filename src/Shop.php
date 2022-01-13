@@ -21,28 +21,30 @@ final class Shop
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            $updateStrategy = $this->getUpdateStrategy($item->name);
-            $updateStrategy->updateQuality($item);
+            $update_strategy = $this->getUpdateStrategy($item->name);
+            $update_strategy->updateQuality($item);
         }
     }
 
-    public function getUpdateStrategy(string $name): IUpdateStrategy
+    private function getUpdateStrategy(string $name): IUpdateStrategy
     {
-        $namespace = 'Shop\UpdateStrategies\\';
-        $name_array = explode(' ', $name);
-        foreach ($name_array as &$word) {
+        $array_names = explode(' ', $name);
+
+        foreach ($array_names as &$word) {
             $word = ucfirst(strtolower($word));
         }
         unset($word);
 
-        $className = $namespace . implode('', $name_array) . 'UpdateStrategy';
+        $namespace = 'Shop\UpdateStrategies\\';
 
-        if (class_exists($className)) {
-            return new $className();
+        $class_name = $namespace . implode('', $array_names) . 'UpdateStrategy';
+
+        if (class_exists($class_name)) {
+            return new $class_name();
         }
 
-        $className = $namespace . 'CommonUpdateStrategy';
+        $class_name = $namespace . 'CommonUpdateStrategy';
 
-        return new  $className();
+        return new  $class_name();
     }
 }
